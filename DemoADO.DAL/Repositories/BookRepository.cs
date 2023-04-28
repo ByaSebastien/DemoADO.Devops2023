@@ -12,7 +12,7 @@ namespace DemoADO.DAL.Repositories
     public class BookRepository : BaseRepository<string,Book>, IBookRepository
     {
 
-        public BookRepository() :base("isbn","Book") { } 
+        public BookRepository() :base("ISBN","BOOK") { } 
 
         protected override Book Convert(IDataRecord dataRecord)
         {
