@@ -1,4 +1,5 @@
 ﻿using DemoADO.DAL.Repositories;
+using DemoADO.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,16 @@ namespace DemoADO.BLL.Services
 {
     public class BookService
     {
-        private readonly IBookRepository
+        private readonly IBookRepository _bookRepository;
+
+        public BookService()
+        {
+            _bookRepository = new BookRepository();
+        }
+
+        public IEnumerable<Book> GetAll()
+        {
+            return _bookRepository.GetAll();
+        }
     }
 }
