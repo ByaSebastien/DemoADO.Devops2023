@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DemoADO.BLL\DemoADO.BLL.csproj" />
+    <ProjectReference Include="..\DemoADO.Models\DemoADO.Models.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,2 +1,11 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using DemoADO.BLL.Services;
+using DemoADO.Models;
+
+BookService bookService = new BookService();
+
+IEnumerable<Book> books = bookService.GetAll();
+
+foreach (Book book in books)
+{
+
+}
