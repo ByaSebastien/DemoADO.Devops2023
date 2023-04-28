@@ -19,6 +19,26 @@ namespace DemoADO.DAL.Repositories
             _connection = new SqlConnection(_connectionString);
         }
 
+        private void GenerateParameter(IDbCommand command, string name, object value)
+        {
+            IDataParameter parameter = command.CreateParameter();
+            parameter.ParameterName = name;
+            parameter.Value = value ?? DBNull.Value;
+            command.Parameters.Add(parameter);
+        }
+
+        private Book Convert(IDataRecord dataRecord)
+        {
+            return new Book()
+            {
+                Isbn = (string)dataRecord["isbn"],
+                Title = (string)dataRecord["Title"],
+                Author = (string)dataRecord["Author"],
+                Description = dataRecord["Description"] == DBNull.Value ? null : (string)dataRecord["Description"],
+                Category = (string)dataRecord["Category"],
+            };
+        }
+
         private void OpenConnection()
         {
             if (_connection.State == ConnectionState.Open)
@@ -42,30 +62,44 @@ namespace DemoADO.DAL.Repositories
                 {
                     while (reader.Read())
                     {
-                        Book book = new Book()
-                        {
-                            Isbn = (string)reader["isbn"],
-                            Title = (string)reader["Title"],
-                            Author = (string)reader["Author"],
-                            Description = reader["Description"] == DBNull.Value ? null : (string)reader["Description"],
-                            Category = (string)reader["Category"],
-                        };
+                        Book book = Convert(reader);
                         books.Add(book);
 
                         // Return avec yield return
 
-                        //yield return new Book()
-                        //{
-                        //    Isbn = (string)reader["isbn"],
-                        //    Title = (string)reader["Title"],
-                        //    Author = (string)reader["Author"],
-                        //    Description = reader["Description"] == DBNull.Value ? null : (string)reader["Description"],
-                        //    Category = (string)reader["Category"],
-                        //};
+                        //yield Convert(reader);
                     }
                 }
                 _connection.Close();
                 return books;
+            }
+        }
+
+        public Book GetOne(string isbn)
+        {
+            using (IDbCommand command = _connection.CreateCommand())
+            {
+                command.CommandText = $"SELECT * FROM BOOK WHERE ISBN = @isbn";
+
+                GenerateParameter(command, "@isbn", isbn);
+
+                OpenConnection();
+
+                Book book;
+
+                using(IDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        book = Convert(reader);
+                    }
+                    else
+                    {
+                        throw new KeyNotFoundException();
+                    }
+                }
+                _connection.Close();
+                return book;
             }
         }
     }

@@ -21,7 +21,7 @@ namespace DemoADO.Models
                    $"   Auteur : {Author}\n" +
                    $"   Catégorie : {Category}\n" +
                    $"   Description : {Description?.Substring(0, 20)}...\n" +
-                   new string('_', 20);
+                   new string('_', 50);
         }
     }
 }
