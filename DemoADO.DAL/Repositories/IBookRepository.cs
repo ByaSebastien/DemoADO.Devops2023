@@ -2,9 +2,7 @@
 
 namespace DemoADO.DAL.Repositories
 {
-    public interface IBookRepository
+    public interface IBookRepository : IBaseRepository<string,Book>
     {
-        IEnumerable<Book> GetAll();
-        Book GetOne(string isbn);
     }
 }

@@ -26,5 +26,10 @@ namespace DemoADO.BLL.Services
         {
             return _bookRepository.GetOne(isbn);
         }
+
+        public bool Insert(Book book)
+        {
+            return _bookRepository.Insert(book);
+        }
     }
 }
